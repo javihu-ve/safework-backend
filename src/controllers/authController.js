@@ -50,4 +50,47 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser };
+// Función para crear un nuevo usuario (Endpoint 2)
+const createUser = async (req, res) => {
+  try {
+    const { email, password, rol, area } = req.body;
+
+    // 1. Verificar si el correo ya existe
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res
+        .status(400)
+        .json({ error: "Bad Request", message: "El usuario ya existe." });
+    }
+
+    // 2. Encriptar la contraseña
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // 3. Crear y guardar el usuario
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      rol,
+      area,
+    });
+
+    await newUser.save();
+
+    // 4. Devolver la respuesta según el contrato
+    res.status(201).json({
+      _id: newUser._id,
+      email: newUser.email,
+      rol: newUser.rol,
+      area: newUser.area,
+    });
+  } catch (error) {
+    console.error("Error en createUser:", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: "Error al crear empleado.",
+    });
+  }
+};
+
+module.exports = { loginUser, createUser };
