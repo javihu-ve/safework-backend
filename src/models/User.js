@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Crea automáticamente fechaCreacion y fechaActualizacion
+    timestamps: { createdAt: 'fechaCreacion', updatedAt: 'fechaActualizacion' } // Crea automáticamente fechaCreacion y fechaActualizacion
   },
 );
 
