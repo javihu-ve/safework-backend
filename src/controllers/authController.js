@@ -50,6 +50,14 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+    try {
+        const usuarios = await User.find();
+        res.status(200).json(usuarios);
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error", message: error.message });
+    }
+};
 // Función para crear un nuevo usuario (Endpoint 2)
 const createUser = async (req, res) => {
   try {
@@ -93,4 +101,4 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, createUser };
+module.exports = { loginUser, createUser, getUsers };
