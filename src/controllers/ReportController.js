@@ -1,35 +1,37 @@
 const Reporte = require('../models/Report');
 
-exports.getReportes = async (res) => {
-    try {
-        const reportes = await Reporte.find();//no usar find by id porque queremos traer todos
-        res.json(reportes);//el proceso se va a cerrar hasta que obtenga una respuesta o hasta que se acabe el limite de tiempo
-    } catch {
-        res.status(500).json({ error: "Error: Get Reports", message: error });
-    }
-}
-
 exports.createReporte = async (req, res) => {
     try {
-        const { titulo, descripcion, areaIncidente, estado } = req.body;
-        //const titulo = req.body.titulo;
-        //Logic
-        let prioridad = "media";
-        if (descripcion.toLowerCase().includes('fuego') || descripcion.toLowerCase().includes('incendio')) {
-            prioridad = "alta";
-        }
+        // Extraemos los nombres exactos que vienen en el JSON del contrato [source: 10]
+        const { titulo, descripcion, nivelGravedad, areaIncidente } = req.body;
 
         const nuevoReporte = new Reporte({
             titulo,
             descripcion,
+            nivelGravedad,
             areaIncidente,
-            prioridad,
-            estado
+            // El 'estado' se pone solo por el default del modelo
         });
 
         await nuevoReporte.save();
-        res.status(201).json(nuevoReporte);//201 successfull
+        
+        // Respuesta exitosa (201 Created)
+        res.status(201).json(nuevoReporte);
+        
     } catch (error) {
-        res.status(400).json({ error: "Error: Create reports", message: error });//400 es para bad request
+        console.error("Error al crear reporte:", error);
+        res.status(400).json({ 
+            error: "Bad Request", 
+            message: "No se pudo crear el reporte. Revisa los campos obligatorios." 
+        });
     }
-}
+};
+
+exports.getReportes = async (req, res) => {
+    try {
+        const reportes = await Reporte.find();
+        res.status(200).json(reportes);
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error", message: error.message });
+    }
+};

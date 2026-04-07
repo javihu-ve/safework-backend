@@ -17,9 +17,9 @@ app.use(express.json());
 const authRoutes = require("./src/routes/authRoutes");
 app.use("/api/auth", authRoutes); // Esto le pone el prefijo a todas las rutas de auth
 const reports = require("./src/routes/reportRoutes");
-app.use("/apireportes", reports); // Esto le pone el prefijo a todas las rutas de auth
+app.use("/api/reportes", reports);
 // Ruta de prueba
-app.get("/", (res) => {
+app.get("/", (req, res) => {
   res.json({ message: "Bienvenido a la API de SafeWork" });
 });
 
