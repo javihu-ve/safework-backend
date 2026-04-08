@@ -186,7 +186,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Bienvenido a la API de SafeWork" });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`✅ Servidor en: http://localhost:${PORT}`);
     console.log(`📚 Swagger en: http://localhost:${PORT}/api-docs`);
 });
