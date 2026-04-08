@@ -24,8 +24,12 @@ const swaggerDocument = {
         contact: { name: 'Soporte SafeWork', email: 'soporte@safework.com' }
     },
     servers: [
-        { url: `http://localhost:${PORT}`, description: 'Servidor de desarrollo local' }
-    ],
+    {
+        // Esto detecta automáticamente si estás en Render o en tu PC
+        url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`,
+        description: 'Servidor Actual'
+    }
+],
     components: {
         securitySchemes: {
             bearerAuth: {
